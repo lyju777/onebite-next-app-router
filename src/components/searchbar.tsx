@@ -32,11 +32,7 @@ export default function Searchbar() {
 
   return (
     <div className={style.container}>
-      <input
-        value={search}
-        onChange={onChangeSearch}
-        onKeyDown={onKeyDown}
-      />
+      <input value={search} onChange={onChangeSearch} onKeyDown={onKeyDown} />
       <button onClick={onSubmit}>검색</button>
     </div>
   );
