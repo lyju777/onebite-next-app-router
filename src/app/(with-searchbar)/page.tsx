@@ -1,10 +1,9 @@
 import BookItem from "@/components/book-item";
 import style from "./page.module.css";
 import { BookData } from "@/types";
-import { delay } from "@/util/delay";
 import { Suspense } from "react";
-import BookItemSkeleton from "@/components/skeleton/book-item-skeleton";
 import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
+import { Metadata } from "next";
 
 // export const dynamic = "";
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
@@ -14,7 +13,6 @@ import BookListSkeleton from "@/components/skeleton/book-list-skeleton";
 // 4. error: 페이지를 에러 페이지로 설정
 
 async function AllBooks() {
-  await delay(1500);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book`,
     {
@@ -36,7 +34,6 @@ async function AllBooks() {
 }
 
 async function RecoBooks() {
-  await delay(3000);
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/book/random`,
     {
@@ -58,22 +55,26 @@ async function RecoBooks() {
   );
 }
 
-export const dynamic = "force-dynamic";
+export const metadata: Metadata = {
+  title: "한입북스",
+  description: "한입 북스에 등록된 도서를 만나보세요.",
+  openGraph: {
+    title: "한입북스",
+    description: "한입 북스에 등록된 도서를 만나보세요.",
+    images: ["/thumbnail.png"],
+  },
+};
 
 export default function Home() {
   return (
     <div className={style.container}>
       <section>
         <h3>지금 추천하는 도서</h3>
-        <Suspense fallback={<BookListSkeleton count={3} />}>
-          <RecoBooks />
-        </Suspense>
+        <RecoBooks />
       </section>
       <section>
         <h3>등록된 모든 도서</h3>
-        <Suspense fallback={<BookListSkeleton count={10} />}>
-          <AllBooks />
-        </Suspense>
+        <AllBooks />
       </section>
     </div>
   );
